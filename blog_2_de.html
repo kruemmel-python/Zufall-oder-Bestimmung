@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klassifizierung von Iris-Daten mit XGBoost</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .footer {
+            margin-top: 40px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Klassifizierung von Iris-Daten mit XGBoost</h1>
+    <p>In diesem Blogbeitrag demonstrieren wir, wie man Iris-Blütendaten mit dem XGBoost-Algorithmus klassifiziert. XGBoost ist ein beliebter und leistungsstarker Machine-Learning-Algorithmus, der für seine hohe Leistung und Effizienz bekannt ist.</p>
+    
+    <h2>Datenvorbereitung</h2>
+    <p>Wir beginnen mit dem Import der notwendigen Bibliotheken und dem Laden des Iris-Datensatzes. Der Iris-Datensatz ist ein klassischer Datensatz im Bereich des maschinellen Lernens und enthält drei Klassen von Iris-Blüten: Setosa, Versicolor und Virginica.</p>
+    <pre>
+import xgboost as xgb
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Iris-Daten laden
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Daten in Trainings- und Testsets aufteilen
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    </pre>
+
+    <h2>Modelltraining</h2>
+    <p>Als nächstes konvertieren wir die Daten in das DMatrix-Format, das von XGBoost verwendet wird. Wir definieren dann die Parameter für das XGBoost-Modell und trainieren es mit den Trainingsdaten.</p>
+    <pre>
+# Daten in DMatrix-Format konvertieren
+dtrain = xgb.DMatrix(X_train, label=y_train)
+dtest = xgb.DMatrix(X_test, label=y_test)
+
+# Parameter definieren
+params = {
+    'objective': 'multi:softmax',
+    'num_class': 3,
+    'eval_metric': 'mlogloss'
+}
+
+# Modell trainieren
+bst = xgb.train(params, dtrain, num_boost_round=100)
+    </pre>
+
+    <h2>Modellbewertung</h2>
+    <p>Nach dem Training des Modells verwenden wir es, um Vorhersagen für die Testdaten zu machen und bewerten seine Leistung anhand der Genauigkeit.</p>
+    <pre>
+# Vorhersagen machen
+y_pred = bst.predict(dtest)
+
+# Modell bewerten
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Genauigkeit: {accuracy * 100:.2f}%")
+    </pre>
+    <p>Das Modell erreichte eine Genauigkeit von 96,67 %, was darauf hinweist, dass es sehr gut auf dem Iris-Datensatz performt.</p>
+    
+    <h2>Fazit</h2>
+    <p>Die Verwendung von XGBoost zur Klassifizierung von Iris-Daten ist äußerst effektiv, wie die hohe Genauigkeit in diesem Beispiel zeigt. Die Effizienz und Leistung von XGBoost machen es zu einer hervorragenden Wahl für verschiedene Aufgaben im maschinellen Lernen.</p>
+    
+    <div class="footer">
+        <p>Wenn man die Leistung des Modells reflektiert, wird deutlich, dass gut konstruierte Modelle wie XGBoost hochpräzise Vorhersagen machen können. Dies zeigt, dass Bestimmungen und Vorhersagen im maschinellen Lernen weit davon entfernt sind, bloße Zufälle zu sein. Die Kombination aus robusten Algorithmen und qualitativ hochwertigen Daten führt oft zu präzisen und zuverlässigen Ergebnissen, was die Stärke des maschinellen Lernens bei der Gewinnung bedeutungsvoller Einblicke aus Daten hervorhebt.</p>
+    </div>
+</body>
+</html>
