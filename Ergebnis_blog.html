@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimierung des Random Forest Modells</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .footer {
+            margin-top: 40px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Optimierung des Random Forest Modells</h1>
+    <p>In diesem Blog-Eintrag möchte ich den Prozess und die Ergebnisse meiner Modelloptimierung mit dem Random Forest Algorithmus erläutern. Insbesondere werde ich die besten gefundenen Hyperparameter und die daraus resultierenden Modellbewertungen diskutieren.</p>
+    
+    <h2>Hyperparameter-Tuning des Random Forest Modells</h2>
+    <p>Für das Hyperparameter-Tuning habe ich GridSearchCV verwendet, das verschiedene Kombinationen von Hyperparametern über Kreuzvalidierung (3-fache Kreuzvalidierung) testet. Die getesteten Hyperparameter umfassen <code>max_depth</code>, <code>min_samples_leaf</code>, <code>min_samples_split</code> und <code>n_estimators</code>.</p>
+    
+    <h2>Ergebnisse des Hyperparameter-Tunings</h2>
+    <p>Nach dem Testen von 24 verschiedenen Kombinationen pro Iteration und insgesamt 72 Fits pro Iteration ergaben sich die folgenden besten Hyperparameter und Leistungsmetriken:</p>
+    
+    <h3>Erste Iteration:</h3>
+    <ul>
+        <li><strong>Beste Hyperparameter:</strong> <code>{'max_depth': 20, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 100}</code></li>
+        <li><strong>Leistungsmetriken:</strong>
+            <ul>
+                <li><strong>Precision:</strong> 0.85</li>
+                <li><strong>Recall:</strong> 0.84</li>
+                <li><strong>F1-Score:</strong> 0.84</li>
+                <li><strong>Accuracy:</strong> 0.84</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <h3>Zweite Iteration:</h3>
+    <ul>
+        <li><strong>Beste Hyperparameter:</strong> <code>{'max_depth': 30, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}</code></li>
+        <li><strong>Leistungsmetriken:</strong>
+            <ul>
+                <li><strong>Precision:</strong> 0.84</li>
+                <li><strong>Recall:</strong> 0.84</li>
+                <li><strong>F1-Score:</strong> 0.84</li>
+                <li><strong>Accuracy:</strong> 0.84</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <h3>Dritte Iteration:</h3>
+    <ul>
+        <li><strong>Beste Hyperparameter:</strong> <code>{'max_depth': 30, 'min_samples_leaf': 2, 'min_samples_split': 5, 'n_estimators': 100}</code></li>
+        <li><strong>Leistungsmetriken:</strong>
+            <ul>
+                <li><strong>Precision:</strong> 0.84</li>
+                <li><strong>Recall:</strong> 0.84</li>
+                <li><strong>F1-Score:</strong> 0.84</li>
+                <li><strong>Accuracy:</strong> 0.84</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <h2>Analyse der Ergebnisse</h2>
+    <p>Die Ergebnisse zeigen, dass die Modifikationen der Hyperparameter über die Iterationen hinweg konsistente Leistungsmetriken erzielten. Die durchschnittliche Genauigkeit blieb stabil bei 0.84, was darauf hinweist, dass das Modell robust gegenüber den Änderungen der Hyperparameter ist. Hier sind einige spezifische Beobachtungen:</p>
+    <ul>
+        <li><strong>Maximale Tiefe (<code>max_depth</code>):</strong> Ein tieferer Baum (z.B. <code>max_depth</code>=30) hat nicht wesentlich bessere Ergebnisse erzielt als ein Baum mit <code>max_depth</code>=20. Dies deutet darauf hin, dass die Tiefe des Baumes ab einer bestimmten Grenze keine signifikanten Vorteile mehr bringt und zu Overfitting führen könnte.</li>
+        <li><strong>Minimale Anzahl von Blättern (<code>min_samples_leaf</code>):</strong> Ein Wert von 1 für <code>min_samples_leaf</code> lieferte ähnliche Ergebnisse wie ein Wert von 2, was darauf hindeutet, dass das Modell flexibel genug ist, um gut zu generalisieren.</li>
+        <li><strong>Minimale Anzahl an Splits (<code>min_samples_split</code>):</strong> Die optimale Anzahl von Splits variierte leicht zwischen 2 und 5, was darauf hindeutet, dass es eine gewisse Flexibilität gibt, wie tief ein Knoten vor der Teilung untersucht wird.</li>
+        <li><strong>Anzahl der Bäume (<code>n_estimators</code>):</strong> Ein höherer Wert für <code>n_estimators</code> (z.B. 200) hat die Modellleistung nicht wesentlich verbessert, was darauf hinweist, dass die Hinzufügung weiterer Bäume nach einer bestimmten Anzahl nur einen geringen zusätzlichen Nutzen bringt.</li>
+    </ul>
+    
+    <h2>Schlussfolgerung</h2>
+    <p>Das Hyperparameter-Tuning des Random Forest Modells zeigte, dass die Modifikationen an den getesteten Parametern zu konsistenten und robusten Leistungsmetriken führten. Trotz der Variationen in den Hyperparametern blieben die Ergebnisse relativ stabil, was die Robustheit des Modells bestätigt.</p>
+    <p>Durch die Optimierung der Hyperparameter konnte ein Modell entwickelt werden, das eine gute Balance zwischen Präzision, Recall und F1-Score aufweist. Diese Ergebnisse sind entscheidend für die Anwendung in realen Szenarien, in denen eine hohe Genauigkeit und Zuverlässigkeit erforderlich sind.</p>
+    
+    <div class="footer">
+        <p></p>
+        <p>Die Leistung des Modells verdeutlicht, dass gut konstruierte Modelle wie der Random Forest hochpräzise Vorhersagen machen können. Dies zeigt, dass Bestimmungen und Vorhersagen im maschinellen Lernen weit davon entfernt sind, bloße Zufälle zu sein. Die Kombination aus robusten Algorithmen und qualitativ hochwertigen Daten führt oft zu präzisen und zuverlässigen Ergebnissen, was die Stärke des maschinellen Lernens bei der Gewinnung bedeutungsvoller Einblicke aus Daten hervorhebt.</p>
+    </div>
+</body>
+</html>
